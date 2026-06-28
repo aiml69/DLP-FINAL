@@ -1,0 +1,31 @@
+
+from keras.models import Sequential
+from keras.layers import Dense, Activation
+from sklearn import datasets
+from sklearn.model_selection import train_test_split
+
+X, y = datasets.load_iris(return_X_y=True)
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.40)
+
+model = Sequential()
+
+model.add(Dense(8, input_shape=(4,)))
+model.add(Activation('sigmoid'))
+
+model.add(Dense(4))
+model.add(Activation('sigmoid'))
+
+model.add(Dense(2))
+model.add(Activation('sigmoid'))
+
+model.add(Dense(1))
+model.add(Activation('sigmoid'))
+
+model.compile(loss='mean_squared_error', optimizer='sgd', metrics=['accuracy'])
+
+model.fit(X_train, y_train, epochs=5)
+model.summary()
+
+score = model.evaluate(X_test, y_test)
+print(score)
