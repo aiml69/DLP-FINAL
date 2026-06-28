@@ -1,0 +1,35 @@
+
+from numpy import expand_dims
+from tensorflow.keras.datasets import fashion_mnist
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
+import matplotlib.pyplot as plt
+
+
+(x_train, y_train), (x_test, y_test) = fashion_mnist.load_data()
+
+img = x_train[0]
+
+plt.figure(figsize=(3,3))
+plt.imshow(img, cmap='gray')
+plt.title("Original Image")
+plt.axis('off')
+plt.show()
+
+img = expand_dims(img, axis=-1)
+
+samples = expand_dims(img, axis=0)
+
+datagen = ImageDataGenerator(width_shift_range=[-5, 5])
+
+it = datagen.flow(samples, batch_size=1)
+
+plt.figure(figsize=(8,8))
+for i in range(9):
+    plt.subplot(3, 3, i + 1)
+    batch = next(it)
+    image_aug = batch[0].astype('uint8').squeeze()
+    plt.imshow(image_aug, cmap='gray')
+    plt.axis('off')
+
+plt.suptitle("Width Shift Augmentation")
+plt.show()
